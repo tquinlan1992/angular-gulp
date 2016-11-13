@@ -1,11 +1,11 @@
 const request = require('request');
-const availableLanguages = require("../../availableLanguages");
 const resolveUrl = require("resolve-url");
 
 
-function getLanguageSelection() {
-    let defaultLanguageSelection = availableLanguages[0];
-    let preferredLanguage = "";
+function getLanguageSelection(languages) {
+    const availableLanguages = languages.available;
+    let defaultLanguageSelection = languages.default || availableLanguages[0];
+    let preferredLanguage = languages.preferred;
     const browserLanguages = navigator.languages || []; //jshint ignore:line
     console.log('browserLanguages', browserLanguages);
     browserLanguages.every(languageOption => {
@@ -21,8 +21,8 @@ function getLanguageSelection() {
     return preferredLanguage || defaultLanguageSelection;
 }
 
-function getLanguageJSONPromise(deferred) {
-    request(resolveUrl("app/resourceLanguages/" + getLanguageSelection() + ".json"), {
+function getLanguageJSONPromise(deferred, availableLanguages) {
+    request(resolveUrl("app/resourceLanguages/" + getLanguageSelection(availableLanguages) + ".json"), {
         json: true
     }, function(error, response, body) {
         if (!error && response.statusCode === 200) {
@@ -37,10 +37,12 @@ const angular = require("angular");
 
 const app = angular.module("resource-languages", []);
 
-app.service("getLanguageJSON", ($q) => {
+app.service("getLanguageJSON", ($q, getEnvConfigs) => {
     "ngInject";
     const deferred = $q.defer();
-    getLanguageJSONPromise(deferred);
+    getEnvConfigs.then(envConfigs => {
+        getLanguageJSONPromise(deferred, envConfigs.languages);
+    });
     return deferred.promise;
 });
 

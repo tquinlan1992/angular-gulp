@@ -7,9 +7,17 @@ app.use(express.static(__dirname + '/public'));
 
 app.get("/app/envConfigs.json", (req, res) => {
     const envConfigs = {
-        serverUrl: process.env.API_SERVER_URL
+        serverUrl: process.env.API_SERVER_URL,
+        languages: {
+            available: [
+                "en-US",
+                "es-US",
+                "es"
+            ],
+            default: "en-US"
+        }
     };
-    res.send(envConfigs);
+    res.json(envConfigs);
 });
 
 app.get('*', function(req, res) {
@@ -18,6 +26,6 @@ app.get('*', function(req, res) {
 
 var port = process.env.PORT || 8000;
 
-app.listen(port, function(){
-  console.log('client server listening on port '+ port);
+app.listen(port, function() {
+    console.log('client server listening on port ' + port);
 });

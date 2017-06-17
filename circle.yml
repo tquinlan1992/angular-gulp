@@ -1,5 +1,6 @@
 dependencies:
   pre:
+        - npm install
         - npm run build-client
         - npm run nodemon-client-server &
         - npm run nodemon-api-server &

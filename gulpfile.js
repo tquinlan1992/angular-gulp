@@ -1,5 +1,4 @@
 const gulp = require('gulp');
-gulp.task('jshint', require("./gulpUtil/tasks/jshint"));
 const createCleanTask = require("./gulpUtil/tasks/clean");
 const createCopyTask = require("./gulpUtil/tasks/copy");
 const createBrowserifyTask = require("./gulpUtil/tasks/browserify");
@@ -10,6 +9,19 @@ const publicBuildAppPath = publicBuildPath + "./app/";
 const srcClientPath = "./src/client/";
 const srcPublicPath = srcClientPath + "./public/";
 const srcAppPath = srcPublicPath + './app/';
+const createJshintTask = require("./gulpUtil/tasks/jshint");
+const createKarmaTask = require("./gulpUtil/tasks/karma");
+const createProtractorTask = require("./gulpUtil/tasks/protractor");
+
+gulp.task('jshint', createJshintTask(['src/**/*.js', 'test/**/*.js', 'gulp/**/*.js']));
+
+gulp.task('browserify-client-angularApp', createBrowserifyTask.rawJsStream(srcAppPath + './angularApp.js', "app", "./build/test/client/"));
+
+gulp.task('jshint-src', createJshintTask(['src/**/*.js', "!src/**/*spec.js"]));
+
+gulp.task("karma-tests", ["browserify-client-angularApp"], createKarmaTask(__dirname + "/karma.conf.js"));
+
+gulp.task("protractor-tests", createProtractorTask("./protractor.conf.js"));
 
 gulp.task("clean-client-html", createCleanTask([publicBuildAppPath + "**/*.html"]));
 gulp.task("clean-client-js", createCleanTask([
@@ -28,11 +40,11 @@ gulp.task("clean-client-font-dependencies", createCleanTask(publicBuildAppPath +
 gulp.task("clean-client-json", createCleanTask([publicBuildAppPath + "./**/*.json"]));
 gulp.task("clean-client-css-custom", createCleanTask(publicBuildAppPath + "./css/custom/**/*.css"));
 
-gulp.task('browserify-client-unminified', ["clean-client-js", "clean-client-map"], createBrowserifyTask.rawJsStream(srcAppPath + './app.js', "app", publicBuildAppPath));
-gulp.task('browserify-client-minified', ["clean-client-js", "clean-client-map"], createBrowserifyTask.minJsStream(srcAppPath + './app.js', "app", publicBuildAppPath));
+gulp.task('browserify-client-unminified', ["jshint-src", "clean-client-js", "clean-client-map"], createBrowserifyTask.rawJsStream(srcAppPath + './app.js', "app", publicBuildAppPath));
+gulp.task('browserify-client-minified', ["jshint-src", "clean-client-js", "clean-client-map"], createBrowserifyTask.minJsStream(srcAppPath + './app.js', "app", publicBuildAppPath));
 
 
-gulp.task("copy-server", ["clean-client-server"], createCopyTask(srcClientPath + "./server.js", srcClientPath, clientBuildPath));
+gulp.task("copy-server", ["clean-client-server"], createCopyTask(srcClientPath + "./**.js", srcClientPath, clientBuildPath));
 gulp.task("copy-client-json", ["clean-client-json"], createCopyTask(srcPublicPath + "./**/*.json", srcPublicPath, publicBuildPath));
 gulp.task("copy-html", ["clean-client-html"], createCopyTask(srcPublicPath + "./**/*.html", srcPublicPath, publicBuildPath));
 gulp.task("copy-css-dependencies", ["clean-client-css-dependencies"], createCopyTask([
@@ -50,14 +62,14 @@ gulp.task("copy-client", [
     "copy-client-json"
 ]);
 
-gulp.task("sassify-client", ["clean-client-css-custom"], createSassifyTask.buildMin(srcAppPath + './sass/index.scss', './build/client/public/app/css/custom'));
+gulp.task("sassify-client", ["clean-client-css-custom"], createSassifyTask.buildMin(srcAppPath + './sass/index.scss', publicBuildAppPath + './css/custom'));
 
 gulp.task('watch-build-client', function() {
-    gulp.watch(['src/client/public/app/**/*.js'], ['browserify-client-unminified']);
-    gulp.watch(['src/client/public/app/**/*.html'], ['copy-html']);
-    gulp.watch(['src/client/public/app/**/*.json'], ['copy-client-json']);
-    gulp.watch(['src/client/server.js', "src/client/server/**/*"], ['copy-server']);
-    gulp.watch('src/client/public/app/**/*.scss', ["sassify-client"]);
+    gulp.watch([srcAppPath + './**/*.js', "!./js/**/*spec.js"], ['browserify-client-unminified']);
+    gulp.watch([srcAppPath + './**/*.html'], ['copy-html']);
+    gulp.watch([srcAppPath + './**/*.json'], ['copy-client-json']);
+    gulp.watch([srcClientPath + './server.js', "src/client/server/**/*"], ['copy-server']);
+    gulp.watch(srcAppPath + './**/*.scss', ["sassify-client"]);
 });
 
 gulp.task('build-client', [

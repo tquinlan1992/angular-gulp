@@ -8,14 +8,15 @@ app.component("sampleComponentIndex", {
         objectTest: "="
     },
     templateUrl: "/app/components/sample/index.html",
-    controller: function($scope, sampleComponentApi) {
+    controller: function(sampleComponentApi) {
         sampleComponentApi.getSampleJson().then(successResponse => {
-            $scope.sampleJSON = successResponse.data;
-                console.log('successResponse from server api confured from /sample.json', successResponse);
-            },
-            errorResponse => {
-                console.log('errorResponse', errorResponse);
-            });
+            this.sampleJSON = successResponse.data;
+        }, errorResponse => {
+            console.log('errorResponse', errorResponse);
+        });
+
+        this.tasks = [1,2,3];
+
     }
 });
 
@@ -25,7 +26,7 @@ app.factory("sampleComponentApi", ($http, getEnvConfigs) => {
 
     factory.getSampleJson = function() {
         return getEnvConfigs.then(envConfigs => {
-            return $http.get(envConfigs.serverUrl + "/sample.json");
+            return $http.get(envConfigs.data.serverUrl + "/sample.json");
         });
     };
 

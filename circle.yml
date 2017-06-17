@@ -4,10 +4,6 @@ machine:
 dependencies:
   pre:
     - npm install
-    - curl -L -o google-chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-    - sudo dpkg -i google-chrome.deb
-    - sudo sed -i 's|HERE/chrome\"|HERE/chrome\" --disable-setuid-sandbox|g' /opt/google/chrome/google-chrome
-    - rm google-chrome.deb
   post:
     - npm run build-client
     - wget https://selenium-release.storage.googleapis.com/2.44/selenium-server-standalone-2.44.0.jar
@@ -15,6 +11,7 @@ dependencies:
         background: true
     - npm run nodemon-client-server &
     - npm run nodemon-api-server &
+    - /bin/sleep 30
 test:
   override:
     - npm run ui-tests

@@ -1,12 +1,17 @@
 dependencies:
   pre:
-        - npm install
-    post:
-        - npm run webdriver:
-            background: true
-        - npm run build-client
-        - npm run nodemon-client-server &
-        - npm run nodemon-api-server &
+    - npm install
+  override:
+    - curl -L -o google-chrome.deb https://s3.amazonaws.com/circle-downloads/google-chrome-stable_current_amd64_47.0.2526.73-1.deb
+    - sudo dpkg -i google-chrome.deb
+    - sudo sed -i 's|HERE/chrome\"|HERE/chrome\" --disable-setuid-sandbox|g' /opt/google/chrome/google-chrome
+    - rm google-chrome.deb
+  post:
+    - npm run webdriver:
+        background: true
+    - npm run build-client
+    - npm run nodemon-client-server &
+    - npm run nodemon-api-server &
 test:
   override:
     - npm run ui-tests

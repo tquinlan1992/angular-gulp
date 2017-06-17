@@ -1,5 +1,23 @@
 machine:
   node:
+<<<<<<< HEAD
+    version:        6.9.1
+dependencies:
+  pre:
+    - npm install
+  post:
+    - npm run build-client
+    - wget https://selenium-release.storage.googleapis.com/2.44/selenium-server-standalone-2.44.0.jar
+    - java -jar selenium-server-standalone-2.44.0.jar:
+        background: true
+    - npm run nodemon-client-server:
+        background: true
+    - npm run nodemon-api-server:
+        background: true
+test:
+  override:
+    - npm run ui-tests
+=======
       version: 6.9.1
   services:
       - docker
@@ -26,3 +44,4 @@ deployment:
         - docker tag tquinlan1992/angulargulp:{master,latest}
         - docker push tquinlan1992/angulargulp:`git describe`
         - docker push tquinlan1992/angulargulp:latest
+>>>>>>> master

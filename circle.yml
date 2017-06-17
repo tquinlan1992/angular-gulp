@@ -9,9 +9,10 @@ dependencies:
     - wget https://selenium-release.storage.googleapis.com/2.44/selenium-server-standalone-2.44.0.jar
     - java -jar selenium-server-standalone-2.44.0.jar:
         background: true
-    - npm run nodemon-client-server &
-    - npm run nodemon-api-server &
-    - /bin/sleep 30
+    - npm run nodemon-client-server:
+        background: true
+    - npm run nodemon-api-server:
+        background: true
 test:
   override:
     - npm run ui-tests

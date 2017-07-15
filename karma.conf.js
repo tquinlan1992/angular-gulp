@@ -29,15 +29,10 @@ module.exports = function(config) {
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
-            'build/**/*.html': ['ng-html2js'],
+            'src/client/**/*.html': ['ng-html2js'],
             '/**/*.js': ['coverage']
         },
-
-        ngHtml2JsPreprocessor: {
-            stripPrefix: "build/client/public",
-            moduleName: "app.templates"
-        },
-
+        
         // web server port
         port: 9876,
 

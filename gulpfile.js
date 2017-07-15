@@ -14,6 +14,7 @@ const createJshintTask = require("./gulpUtil/tasks/jshint");
 const createKarmaTask = require("./gulpUtil/tasks/karma");
 const createProtractorTask = require("./gulpUtil/tasks/protractor");
 const templatecache = require("./gulpUtil/tasks/templatecache");
+const karmaTests = "./build/karmaTests/client/";
 
 gulp.task('jshint', createJshintTask(['src/**/*.js', 'test/**/*.js', 'gulp/**/*.js']));
 
@@ -21,13 +22,19 @@ gulp.task("clean-client-html", createCleanTask([publicBuildAppPath + "**/*.html"
 
 gulp.task("cleanTempAppWithTemplateCache", createCleanTask([tempBuildPathToBrowserifyAppWithTemplateCache]));
 
-gulp.task("templateCache", templatecache("src/client/public/app/**/*.html", {standalone:true}, tempBuildPathToBrowserifyAppWithTemplateCache));
+gulp.task("copyTemplateCacheToBrowserifyWithApp", templatecache("src/client/public/app/**/*.html", {standalone:true}, tempBuildPathToBrowserifyAppWithTemplateCache));
 
-gulp.task("copySrcAppJsToTempToCombineWithTemplateCache", ["cleanTempAppWithTemplateCache", "templateCache"], createCopyTask(srcAppPath + "./**", srcAppPath, tempBuildPathToBrowserifyAppWithTemplateCache));
+gulp.task("copySrcAppJsToTempToCombineWithTemplateCache", ["cleanTempAppWithTemplateCache", "copyTemplateCacheToBrowserifyWithApp"], createCopyTask(srcAppPath + "./**", srcAppPath, tempBuildPathToBrowserifyAppWithTemplateCache));
 
 gulp.task('jshint-src', createJshintTask(['src/**/*.js', "!src/**/*spec.js"]));
 
-gulp.task("karma-tests", ["browserify-client-unminified"], createKarmaTask(__dirname + "/karma.conf.js"));
+gulp.task("copyTemplateCacheToBrowserifyWithAngularApp", templatecache("src/client/public/app/**/*.html", {standalone:true}, karmaTests));
+
+gulp.task('browserify-client-angularApp', ["copyTemplateCacheToBrowserifyWithAngularApp"], createBrowserifyTask.rawJsStream(karmaTests + './angularApp.js', "app", "./build/test/client/"));
+
+
+
+gulp.task("karma-tests", ["browserify-client-angularApp"], createKarmaTask(__dirname + "/karma.conf.js"));
 
 gulp.task("protractor-tests", createProtractorTask("./protractor.conf.js"));
 

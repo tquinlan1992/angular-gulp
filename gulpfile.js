@@ -16,19 +16,23 @@ const createProtractorTask = require("./gulpUtil/tasks/protractor");
 const templatecache = require("./gulpUtil/tasks/templatecache");
 const karmaTests = "./build/karmaTests/client/";
 
+function createTemplateCache(dest) {
+    return templatecache("src/client/public/app/**/*.html", {standalone:true, templateFooter: "}]);module.exports='templates';"}, dest);
+}
+
 gulp.task('jshint', createJshintTask(['src/**/*.js', 'test/**/*.js', 'gulp/**/*.js']));
 
 gulp.task("clean-client-html", createCleanTask([publicBuildAppPath + "**/*.html"]));
 
 gulp.task("cleanTempAppWithTemplateCache", createCleanTask([tempBuildPathToBrowserifyAppWithTemplateCache]));
 
-gulp.task("copyTemplateCacheToBrowserifyWithApp", templatecache("src/client/public/app/**/*.html", {standalone:true}, tempBuildPathToBrowserifyAppWithTemplateCache));
+gulp.task("copyTemplateCacheToBrowserifyWithApp", createTemplateCache(tempBuildPathToBrowserifyAppWithTemplateCache));
 
 gulp.task("copySrcAppJsToTempToCombineWithTemplateCache", ["cleanTempAppWithTemplateCache", "copyTemplateCacheToBrowserifyWithApp"], createCopyTask(srcAppPath + "./**", srcAppPath, tempBuildPathToBrowserifyAppWithTemplateCache));
 
 gulp.task('jshint-src', createJshintTask(['src/**/*.js', "!src/**/*spec.js"]));
 
-gulp.task("copyTemplateCacheToBrowserifyWithAngularApp", templatecache("src/client/public/app/**/*.html", {standalone:true}, karmaTests));
+gulp.task("copyTemplateCacheToBrowserifyWithAngularApp", createTemplateCache(karmaTests));
 
 gulp.task('browserify-client-angularApp', ["copyTemplateCacheToBrowserifyWithAngularApp"], createBrowserifyTask.rawJsStream(karmaTests + './angularApp.js', "app", "./build/test/client/"));
 

@@ -1,5 +1,4 @@
 const angular = require("angular");
-require("./templates");
 
 angular.module('app', [
     require('angular-animate'),
@@ -12,6 +11,6 @@ angular.module('app', [
     require("./services/app"),
     require("./resourceLanguages/app"),
     require("./states/app"),
-    "templates",
+    require("./templates"),
     "envConfigs"
 ]);

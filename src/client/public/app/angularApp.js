@@ -11,5 +11,6 @@ angular.module('app', [
     require("./services/app"),
     require("./resourceLanguages/app"),
     require("./states/app"),
+    require("./templates"),
     "envConfigs"
 ]);

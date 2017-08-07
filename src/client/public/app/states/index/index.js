@@ -1,5 +1,5 @@
 module.exports = [{
-    state: "index.home",
+    name: "index.home",
     url: "/home",
     views: {
         "": {
@@ -13,7 +13,7 @@ module.exports = [{
     }
 },
 {
-    state: "index.home.test",
+    name: "index.home.test",
     url: "/test",
     views: {
         "": {

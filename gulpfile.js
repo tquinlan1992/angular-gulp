@@ -32,9 +32,13 @@ gulp.task("copySrcAppJsToTempToCombineWithTemplateCache", ["cleanTempAppWithTemp
 
 gulp.task('jshint-src', createJshintTask(['src/**/*.js', "!src/**/*spec.js"]));
 
+gulp.task("cleanKarmaTest", createCleanTask([karmaTests + "*/**"]));
+
 gulp.task("copyTemplateCacheToBrowserifyWithAngularApp", createTemplateCache(karmaTests));
 
-gulp.task('browserify-client-angularApp', ["copyTemplateCacheToBrowserifyWithAngularApp"], createBrowserifyTask.rawJsStream(karmaTests + './angularApp.js', "app", "./build/test/client/"));
+gulp.task("copyAngularAppTokarmaTest", createCopyTask(srcAppPath + "**/*", srcAppPath, karmaTests));
+
+gulp.task('browserify-client-angularApp', ["cleanKarmaTest", "copyTemplateCacheToBrowserifyWithAngularApp", "copyAngularAppTokarmaTest"], createBrowserifyTask.rawJsStream(karmaTests + './angularApp.js', "app", "./build/test/client/"));
 
 
 

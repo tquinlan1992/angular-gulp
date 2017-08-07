@@ -10,7 +10,6 @@ app.component("sampleUrlParam", {
         template: "<h1>header text {{$ctrl.id}}</h1>",
         controller: function($scope) {
             "ngInject";
-            console.log("id", this.id);
             $scope.id = this.id;
         }
 });

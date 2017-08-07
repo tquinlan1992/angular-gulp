@@ -1,8 +1,8 @@
 const gulp = require('gulp');
-const createCleanTask = require("./gulpUtil/tasks/clean");
-const createCopyTask = require("./gulpUtil/tasks/copy");
-const createBrowserifyTask = require("./gulpUtil/tasks/browserify");
-const createSassifyTask = require("./gulpUtil/tasks/sassify");
+const createCleanTask = require("./gulpUtil/clean");
+const createCopyTask = require("./gulpUtil/copy");
+const createBrowserifyTask = require("./gulpUtil/browserify");
+const createSassifyTask = require("./gulpUtil/sassify");
 const clientBuildPath = "./build/client/";
 const publicBuildPath = clientBuildPath + "./public/";
 const publicBuildAppPath = publicBuildPath + "./app/";
@@ -10,15 +10,16 @@ const tempBuildPathToBrowserifyAppWithTemplateCache = "./build/tempAppWithTempla
 const srcClientPath = "./src/client/";
 const srcPublicPath = srcClientPath + "./public/";
 const srcAppPath = srcPublicPath + './app/';
-const createJshintTask = require("./gulpUtil/tasks/jshint");
-const createKarmaTask = require("./gulpUtil/tasks/karma");
-const createProtractorTask = require("./gulpUtil/tasks/protractor");
-const templatecache = require("./gulpUtil/tasks/templatecache");
+const createJshintTask = require("./gulpUtil/jshint");
+const createKarmaTask = require("./gulpUtil/karma");
+const createProtractorTask = require("./gulpUtil/protractor");
+const templatecache = require("./gulpUtil/templatecache");
 const karmaTests = "./build/karmaTests/client/";
 
 function createTemplateCache(dest) {
     return templatecache("src/client/public/app/**/*.html", {standalone:true, templateFooter: "}]);module.exports='templates';"}, dest);
 }
+
 
 gulp.task('jshint', createJshintTask(['src/**/*.js', 'test/**/*.js', 'gulp/**/*.js']));
 

@@ -15,7 +15,7 @@ app.config(($stateProvider, $urlRouterProvider, $locationProvider) => {
             abstract: true,
             views: {
                 "": {
-                    templateUrl: "states/index/index.html"
+                    component: "index"
                 }
             }
         }],

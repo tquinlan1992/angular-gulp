@@ -20,7 +20,7 @@ module.exports = function(config) {
 
         // list of files / patterns to load in the browser
         files: [
-            './build/test/client/app.js', './node_modules/angular-mocks/angular-mocks.js', './src/client/public/app/components/**/*.spec.js', 'build/**/*.html'
+            './build/test/client/app.js', './node_modules/angular-mocks/angular-mocks.js', './tests/karma/**/*.spec.js', 'build/**/*.html'
         ],
 
         // list of files to exclude
@@ -32,7 +32,7 @@ module.exports = function(config) {
             'src/client/**/*.html': ['ng-html2js'],
             '/**/*.js': ['coverage']
         },
-        
+
         // web server port
         port: 9876,
 

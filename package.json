@@ -6,7 +6,7 @@
   "scripts": {
     "build-client": "gulp build-client",
     "watch-build-client": "gulp watch-build-client",
-    "nodemon-client-server": "API_SERVER_URL=http://localhost:3000 nodemon build/client/server.js",
+    "nodemon-client-server": "API_SERVER_URL=http://localhost:3000 CLIENT_PORT=3001 nodemon build/client/server.js",
     "node-client-server": "API_SERVER_URL=http://localhost:3000 node build/client/server.js",
     "nodemon-client-server-and-watch-build-client": "concurrently -r 'npm run build-client' 'npm run watch-build-client' 'npm run nodemon-client-server'",
     "nodemon-api-server": "nodemon src/server/server.js",
@@ -28,7 +28,7 @@
     "angular-messages": "^1.5.8",
     "angular-resource": "^1.5.8",
     "angular-translate": "^2.13.0",
-    "angular-ui-router": "^0.3.1",
+    "angular-ui-router": "^1.0.3",
     "animate.css": "^3.5.1",
     "async": "^2.2.0",
     "aws-serverless-express": "^1.3.0",
